@@ -6,4 +6,5 @@ plugins/
 config/
 *.log
 .devcontainer/
-s3_datasets/
+data_sources/
+gc_credentials.json

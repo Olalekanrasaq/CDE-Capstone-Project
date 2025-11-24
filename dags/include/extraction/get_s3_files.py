@@ -1,10 +1,9 @@
 import boto3
 import os
 from dotenv import load_dotenv
-from airflow.models import Variable
 
-# load .env file
-load_dotenv()
+path_to_vars = '/opt/airflow/dags/include/extraction/aws_creds.env'
+load_dotenv(path_to_vars)
 
 # create a boto session
 def aws_session():
@@ -12,9 +11,9 @@ def aws_session():
     A function to define boto session to be used across all AWS service (for data extraction)
     '''
     session = boto3.Session(
-        aws_access_key_id=Variable.get("AWS_ACCESS_KEY_ID"),
-        aws_secret_access_key=Variable.get("AWS_SECRET_ACCESS_KEY"),
-        region_name=Variable.get("AWS_REGION")
+        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+        region_name=os.getenv("AWS_REGION")
     )
     return session
 
@@ -25,7 +24,7 @@ s3 = session.client('s3')
 # s3 bucket and keys
 bucket_name = 'core-telecoms-data-lake'
 s3_keys = ['call logs', 'customers', 'social_medias']
-local_download_dir = '/opt/airflow/dags/include/s3_datasets'
+local_download_dir = '/opt/airflow/dags/include/data_sources'
 
 def download_s3_files():
     '''
