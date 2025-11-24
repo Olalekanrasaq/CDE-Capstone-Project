@@ -54,17 +54,9 @@ def copy_postgres_table():
             continue
 
         df = pd.read_sql(f"SELECT * FROM {db_schema['Parameter']['Value']}.{table}", conn)
-        
-        # rename table columns
-        cols_rename = {
-            'Column1':'index', 'customeR iD':'customer_id', 
-            'COMPLAINT_catego ry':'complaint_category', "agent ID":"agent_id",
-            "resolutionstatus":"resolution_status"
-            }
-        df_renamed = df.rename(columns=cols_rename)
 
         # load the dataframe to parquet file
-        df_renamed.to_parquet(table_file_path)
+        df.to_parquet(table_file_path)
         print(f'Table {table} extracted into parquet successfully!!')
     print("Copying database tables operation completed.")
     conn.close()
