@@ -8,3 +8,7 @@ config/
 .devcontainer/
 data_sources/
 gc_credentials.json
+.terraform/
+*.hcl
+*.tfstate
+*.tfstate.backup

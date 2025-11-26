@@ -1,12 +1,11 @@
 import boto3
 import psycopg2
 import pandas as pd
-import os
-from include.extraction.get_s3_files import aws_session
+import io
+from include.data_ingestion.get_s3_files import get_boto3_client
 
 # create boto session and ssm client
-session = aws_session()
-ssm_client = session.client('ssm')
+ssm_client = get_boto3_client('aws_source', 'eu-north-1', 'ssm')
 
 # database connection credentials
 db_host = ssm_client.get_parameter(Name='/coretelecomms/database/db_host')
@@ -16,15 +15,13 @@ db_username = ssm_client.get_parameter(Name='/coretelecomms/database/db_username
 db_port = ssm_client.get_parameter(Name='/coretelecomms/database/db_port')
 db_schema = ssm_client.get_parameter(Name='/coretelecomms/database/table_schema_name')
 
-# output file path
-output_file_path = '/opt/airflow/dags/include/data_sources/website_forms'
+dest_bucket = 'cde-capstone-olalekan'
+key_prefix = 'website_forms'
 
 def copy_postgres_table():
     '''
     A function that copy data from postgres database table
     '''
-    # create a sub-directory where the output data will be written to if not exist
-    os.makedirs(output_file_path, exist_ok=True)
 
     # connect to the database
     conn = psycopg2.connect(
@@ -46,18 +43,32 @@ def copy_postgres_table():
 
     tables = [table[0] for table in cur.fetchall()]
 
+    s3_dest = get_boto3_client('aws_dest', 'us-east-1', 's3')
+    objs = s3_dest.list_objects_v2(Bucket=dest_bucket, Prefix=key_prefix)
+    objs_list = [obj['Key'] for obj in objs.get('Content', [])]
+
     for table in tables:
-        # create a file path to store the table data
-        table_file_path = os.path.join(output_file_path, f'{table}.parquet')
-        # check if the file path already exist
-        if os.path.exists(table_file_path):
+
+        dest_key = f"{key_prefix}/{table}.parquet"
+        
+        if dest_key in objs_list:
+            print(f"{dest_key} already exists in {dest_bucket}...")
             continue
 
         df = pd.read_sql(f"SELECT * FROM {db_schema['Parameter']['Value']}.{table}", conn)
 
-        # load the dataframe to parquet file
-        df.to_parquet(table_file_path)
-        print(f'Table {table} extracted into parquet successfully!!')
+        # Convert to Parquet (in memory)
+        parquet_buffer = io.BytesIO()
+        df.to_parquet(parquet_buffer, engine='pyarrow', index=True)
+
+        # Upload Parquet to destination S3
+        s3_dest.put_object(
+            Bucket=dest_bucket,
+            Key=dest_key,
+            Body=parquet_buffer.getvalue()
+        )
+
+        print(f'Table {table} written to s3 successfully!!')
     print("Copying database tables operation completed.")
     conn.close()
 
