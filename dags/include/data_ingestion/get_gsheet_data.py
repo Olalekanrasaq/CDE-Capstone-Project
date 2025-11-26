@@ -5,12 +5,14 @@ import io
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 from include.data_ingestion.get_s3_files import get_boto3_client
 
+# set google cloud hook for service account authentication
 hook = GCSHook(gcp_conn_id="google_cloud_default")
-# client = hook.get_conn()
 cred_dict = json.loads(hook._get_field("keyfile_dict"))
 
+# spreadsheet key id
 spreadsheet_key = '1JePJO9e3h6tEqldkJjD5P6__yEpzbOtshdPN1mgkqoE'
 
+# s3 buckets parameter
 dest_bucket = 'cde-capstone-olalekan'
 key_prefix = 'agents'
 
@@ -19,12 +21,13 @@ def _extract_gsheet_data():
     A function to extract data from a private google sheet
     '''
 
-    # output parquet file
+    # key to be ussed in s3 bucket destination
     dest_key = f'{key_prefix}/agents.parquet'
 
+    # list the existing keys in the agents s3 bucket subfolder
     s3_dest = get_boto3_client('aws_dest', 'us-east-1', 's3')
     objs = s3_dest.list_objects_v2(Bucket=dest_bucket, Prefix=key_prefix)
-    objs_list = [obj['Key'] for obj in objs.get('Content', [])]
+    objs_list = [obj['Key'] for obj in objs.get('Contents', [])]
 
     if dest_key not in objs_list:
 

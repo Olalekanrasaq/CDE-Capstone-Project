@@ -15,6 +15,7 @@ db_username = ssm_client.get_parameter(Name='/coretelecomms/database/db_username
 db_port = ssm_client.get_parameter(Name='/coretelecomms/database/db_port')
 db_schema = ssm_client.get_parameter(Name='/coretelecomms/database/table_schema_name')
 
+# s3 bucket parameter
 dest_bucket = 'cde-capstone-olalekan'
 key_prefix = 'website_forms'
 
@@ -22,6 +23,11 @@ def copy_postgres_table():
     '''
     A function that copy data from postgres database table
     '''
+
+    # list all the existing keys in website_forms s3 bucket subfolder
+    s3_dest = get_boto3_client('aws_dest', 'us-east-1', 's3')
+    objs = s3_dest.list_objects_v2(Bucket=dest_bucket, Prefix=key_prefix)
+    objs_list = [obj['Key'] for obj in objs.get('Contents', [])]
 
     # connect to the database
     conn = psycopg2.connect(
@@ -41,20 +47,20 @@ def copy_postgres_table():
         AND table_schema = %s;
     """, (db_schema['Parameter']['Value'],))
 
+    # get the name of the tale from the cursor tuple output
     tables = [table[0] for table in cur.fetchall()]
-
-    s3_dest = get_boto3_client('aws_dest', 'us-east-1', 's3')
-    objs = s3_dest.list_objects_v2(Bucket=dest_bucket, Prefix=key_prefix)
-    objs_list = [obj['Key'] for obj in objs.get('Content', [])]
 
     for table in tables:
 
+        # create the key to be ued to save the file in s3
         dest_key = f"{key_prefix}/{table}.parquet"
         
+        # check if the key (filepath) already exists in the s3 bucket
         if dest_key in objs_list:
             print(f"{dest_key} already exists in {dest_bucket}...")
             continue
-
+        
+        # read the content of the database into a pandas dataframe
         df = pd.read_sql(f"SELECT * FROM {db_schema['Parameter']['Value']}.{table}", conn)
 
         # Convert to Parquet (in memory)
