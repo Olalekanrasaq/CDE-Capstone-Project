@@ -2,6 +2,7 @@ import boto3
 import psycopg2
 import pandas as pd
 import io
+from datetime import datetime
 from include.data_ingestion.get_s3_files import get_boto3_client
 
 # create boto session and ssm client
@@ -47,7 +48,7 @@ def copy_postgres_table():
         AND table_schema = %s;
     """, (db_schema['Parameter']['Value'],))
 
-    # get the name of the tale from the cursor tuple output
+    # get the name of the tables from the cursor tuple output
     tables = [table[0] for table in cur.fetchall()]
 
     for table in tables:
@@ -62,16 +63,23 @@ def copy_postgres_table():
         
         # read the content of the database into a pandas dataframe
         df = pd.read_sql(f"SELECT * FROM {db_schema['Parameter']['Value']}.{table}", conn)
+        df = df.set_index(df.columns[0])
 
         # Convert to Parquet (in memory)
         parquet_buffer = io.BytesIO()
-        df.to_parquet(parquet_buffer, engine='pyarrow', index=True)
+        df.to_parquet(parquet_buffer, engine='pyarrow', index=False)
 
         # Upload Parquet to destination S3
         s3_dest.put_object(
             Bucket=dest_bucket,
             Key=dest_key,
-            Body=parquet_buffer.getvalue()
+            Body=parquet_buffer.getvalue(),
+            Metadata={
+                "load_time": datetime.utcnow().isoformat(),
+                "source_file": "Postgres Transactional Database",
+                "record_count": str(len(df)),
+                "no_of_columns": str(len(df.columns))
+            }
         )
 
         print(f'Table {table} written to s3 successfully!!')
