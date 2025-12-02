@@ -1,10 +1,8 @@
 from airflow.sdk import DAG
 from pendulum import datetime
-from datetime import timedelta
 from airflow.providers.standard.operators.python import PythonOperator
 from airflow.providers.amazon.aws.operators.redshift_data import RedshiftDataOperator
 from airflow.providers.standard.operators.trigger_dagrun import TriggerDagRunOperator
-from airflow.providers.standard.sensors.time_delta import TimeDeltaSensor
 from include.data_ingestion.jobs_drop import delete_copy_job
 
 with DAG(
@@ -23,11 +21,6 @@ with DAG(
         aws_conn_id='aws_dest',
         sql='include/sql/redshift_schemas.sql'
     )
-
-    # wait_5_sec = TimeDeltaSensor(
-    #     task_id='wait_5_seconds',
-    #     delta=timedelta(seconds=5)
-    # )
 
     copy_jobs = (
         'cde_s3_auto_copy_customers', 

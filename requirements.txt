@@ -1,2 +1,7 @@
 gspread
 google-auth
+dbt-core
+dbt-redshift
+astronomer-cosmos
+streamlit
+psycopg2-binary

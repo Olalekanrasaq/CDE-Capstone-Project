@@ -1,0 +1,39 @@
+version: 2
+
+sources:
+  - name: coretelecom
+    description: A clone of data from the cde_captone redshift data warehouse
+    database: cde_capstone
+    schema: landing
+    tables:
+      - name: customers
+        description: A customer table containing info about customers
+        columns:
+          - name: customer_id
+            description: Primary Key
+            
+      - name: agents
+        description: A table containing information about agents
+        columns:
+          - name: agent_id
+            description: Primary Key
+            
+      - name: call_logs
+        description: A table containing complaints via call log
+        columns:
+          - name: call_id
+            description: Primary Key
+            
+      - name: social_media
+        description: A table containing complaints via social media
+        columns:
+          - name: complaint_id
+            description: Primary Key
+           
+
+      - name: website_forms
+        description: A table containing complaints via website forms
+        columns:
+          - name: request_id
+            description: Primary Key
+            

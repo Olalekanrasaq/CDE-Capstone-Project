@@ -23,7 +23,7 @@ def _extract_gsheet_data():
     '''
 
     # key to be used in s3 bucket destination
-    dest_key = f'{key_prefix}/agents2.parquet'
+    dest_key = f'{key_prefix}/agents.parquet'
 
     # list the existing keys in the agents s3 bucket subfolder
     s3_dest = get_boto3_client('aws_dest', 'us-east-1', 's3')

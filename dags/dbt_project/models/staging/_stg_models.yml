@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: stg_coretelecom_agents
+    description: "Staging model for coretelecom agents"
+    columns:
+      - name: agent_id
+        description: "Primary Key from source table"
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_coretelecom_customers
+    description: "Staging model for coretelecom customers"
+    columns:
+      - name: customer_id
+        description: "Primary Key from source table"
+        data_tests:
+          - unique
+          - not_null  
+
+  - name: stg_coretelecom_callLogs
+    description: "Staging model for coretelecom call logs"
+    columns:
+      - name: call_id
+        description: "Primary Key from source table"
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_coretelecom_socialMedia
+    description: "Staging model for coretelecom social media complaints"
+    columns:
+      - name: complaint_id
+        description: "Primary Key from source table"
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_coretelecom_websiteForms
+    description: "Staging model for coretelecom website forms complaints"
+    columns:
+      - name: request_id
+        description: "Primary Key from source table"
+        data_tests:
+          - unique
+          - not_null
