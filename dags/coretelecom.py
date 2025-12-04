@@ -32,10 +32,10 @@ with DAG(
         python_callable=transfer_s3_files
     )
 
-    # ingest_db_tables = PythonOperator(
-    #     task_id='ingest_postgres_data',
-    #     python_callable=copy_postgres_table
-    # )
+    ingest_db_tables = PythonOperator(
+        task_id='ingest_postgres_data',
+        python_callable=copy_postgres_table
+    )
 
     ingest_gsheet_data = PythonOperator(
         task_id='ingest_gsheet_data',
@@ -50,7 +50,8 @@ with DAG(
     run_dbt_models = DbtTaskGroup(
         group_id="model_dw_data",
         project_config=ProjectConfig(dbt_project_path),
-        profile_config=profile_config
+        profile_config=profile_config,
+        default_args={"retries": 2}
     )
 
-    [ingest_s3_files, ingest_gsheet_data] >> wait_10_secs >> run_dbt_models
+    [ingest_s3_files, ingest_db_tables, ingest_gsheet_data] >> wait_10_secs >> run_dbt_models
