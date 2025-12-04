@@ -67,6 +67,9 @@ def transfer_s3_files():
             if s3_key == 'call logs' and len(df.columns) == 9:
                 df = df.set_index(df.columns[0])
 
+            # inlcude the data load time
+            df['ingested_at'] = datetime.now()
+            
             # Convert to Parquet (in memory)
             parquet_buffer = io.BytesIO()
             df.to_parquet(parquet_buffer, engine='pyarrow', index=False)

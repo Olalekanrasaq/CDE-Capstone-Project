@@ -1,3 +1,11 @@
+{{ config(
+    materialized='incremental',
+    unique_key='complaint_id',
+    sort=['ingested_at', 'mediacomplaintgenerationdate', 'complaint_id'],
+    sort_type='interleaved'
+) }}
+
+
 with stg_customers as (
     select
         customer_id,
@@ -16,7 +24,7 @@ stg_agents as (
 stg_social_media as (
     select
         *
-    from {{ ref('stg_coretelecom_socialMedia') }}
+    from {{ ref('stg_coretelecom_social_media') }}
 )
 
 select 
@@ -32,7 +40,12 @@ select
     sm.media_channel,
     sm.request_date,
     sm.resolution_date,
-    sm.mediacomplaintgenerationdate
+    sm.mediacomplaintgenerationdate,
+    sm.ingested_at
 from stg_social_media sm
 left join stg_customers c on sm.customer_id = c.customer_id
 left join stg_agents a on sm.agent_id = a.agent_id
+
+{% if is_incremental() %}
+  where sm.ingested_at > (select max(ingested_at) from {{ this }})
+{% endif %}

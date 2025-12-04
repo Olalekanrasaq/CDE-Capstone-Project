@@ -65,6 +65,9 @@ def copy_postgres_table():
         df = pd.read_sql(f"SELECT * FROM {db_schema['Parameter']['Value']}.{table}", conn)
         df = df.set_index(df.columns[0])
 
+        # inlcude the data load time
+        df['ingested_at'] = datetime.now()
+
         # Convert to Parquet (in memory)
         parquet_buffer = io.BytesIO()
         df.to_parquet(parquet_buffer, engine='pyarrow', index=False)

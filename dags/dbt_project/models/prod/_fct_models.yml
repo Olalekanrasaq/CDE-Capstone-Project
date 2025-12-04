@@ -1,0 +1,54 @@
+version: 2
+
+models:
+  - name: fct_all_complaints
+    description: "Fact table consolidating all complaints from call logs, social media, and web forms"
+    columns:
+      - name: complaint_id
+        description: "Unique identifier for each complaint"
+        data_tests:
+          - unique
+          - not_null
+
+  - name: fct_call_logs
+    description: "Fact table for call log complaints"
+    columns:
+      - name: call_id
+        description: "Primary Key from call logs source table"
+        data_tests:
+          - unique
+          - not_null
+
+  - name: fct_social_media
+    description: "Fact table for social media complaints"
+    columns:
+      - name: complaint_id
+        description: "Primary Key from social media source table"
+        data_tests:
+          - unique
+          - not_null
+
+  - name: fct_web_forms
+    description: "Fact table for web form complaints"
+    columns:
+      - name: request_id
+        description: "Primary Key from web forms source table"
+        data_tests:
+          - unique
+          - not_null
+
+  - name: fct_complaints_agg
+    description: "Aggregated fact table summarizing complaints by category and date"
+    columns:
+      - name: complaint_date
+        description: "Date of the complaint"
+      - name: complaint_category
+        description: "Category of the complaint"
+      - name: resolved_count
+        description: "Count of resolved complaints"
+      - name: pending_count
+        description: "Count of complaints that are in-progress"
+      - name: blocked_count
+        description: "Count of blocked complaints"
+      - name: backlog_count
+        description: "Count of complaints in backlog"

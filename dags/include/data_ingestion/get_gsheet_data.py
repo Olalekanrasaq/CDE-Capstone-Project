@@ -44,6 +44,9 @@ def _extract_gsheet_data():
         # convert google sheet data to pandas dataframe
         df = pd.DataFrame(worksheet.get_all_records())
 
+        # inlcude the data load time
+        df['ingested_at'] = datetime.now()
+
         # Convert to Parquet (in memory)
         parquet_buffer = io.BytesIO()
         df.to_parquet(parquet_buffer, engine='pyarrow', index=False)

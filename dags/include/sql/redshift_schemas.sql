@@ -8,26 +8,28 @@ CREATE SCHEMA IF NOT EXISTS production;
 
 -- create customers table
 CREATE TABLE IF NOT EXISTS landing.customers (
-    customer_id VARCHAR PRIMARY KEY,
+    customer_id VARCHAR,
     name VARCHAR,
     gender CHAR(1),
     birth_date VARCHAR,
     signup_date VARCHAR,
     email VARCHAR,
-    address VARCHAR
+    address VARCHAR,
+    ingested_at TIMESTAMP
 );
 
 -- create agents table
 CREATE TABLE IF NOT EXISTS landing.agents (
-    agent_id BIGINT PRIMARY KEY,
+    agent_id BIGINT,
     name VARCHAR,
     experience VARCHAR,
-    state VARCHAR
+    state VARCHAR,
+    ingested_at TIMESTAMP
 );
 
 -- create call_logs table
 CREATE TABLE IF NOT EXISTS landing.call_logs (
-    call_id VARCHAR PRIMARY KEY, 
+    call_id VARCHAR, 
     customer_id VARCHAR,
     complaint_category VARCHAR,
     agent_id BIGINT,
@@ -35,13 +37,12 @@ CREATE TABLE IF NOT EXISTS landing.call_logs (
     call_end_time VARCHAR,
     resolution_status VARCHAR,
     callLogsGenerationDate VARCHAR,
-    FOREIGN KEY (customer_id) REFERENCES landing.customers(customer_id),
-    FOREIGN KEY (agent_id) REFERENCES landing.agents(agent_id)
+    ingested_at TIMESTAMP
 );
 
 -- create call_logs table
 CREATE TABLE IF NOT EXISTS landing.social_media (
-    complaint_id VARCHAR PRIMARY KEY,
+    complaint_id VARCHAR,
     customer_id VARCHAR,
     complaint_category VARCHAR,
     agent_id BIGINT,
@@ -50,13 +51,12 @@ CREATE TABLE IF NOT EXISTS landing.social_media (
     resolution_date VARCHAR,
     media_channel VARCHAR,
     MediaComplaintGenerationDate VARCHAR,
-    FOREIGN KEY (customer_id) REFERENCES landing.customers(customer_id),
-    FOREIGN KEY (agent_id) REFERENCES landing.agents(agent_id)
+    ingested_at TIMESTAMP
 );
 
 -- create call_logs table
 CREATE TABLE IF NOT EXISTS landing.website_forms (
-    request_id VARCHAR PRIMARY KEY,
+    request_id VARCHAR,
     customer_id VARCHAR,
     complaint_category VARCHAR,
     agent_id BIGINT,
@@ -64,6 +64,5 @@ CREATE TABLE IF NOT EXISTS landing.website_forms (
     request_date VARCHAR,
     resolution_date VARCHAR,
     webFormGenerationDate VARCHAR,
-    FOREIGN KEY (customer_id) REFERENCES landing.customers(customer_id),
-    FOREIGN KEY (agent_id) REFERENCES landing.agents(agent_id)
-)
+    ingested_at TIMESTAMP
+);

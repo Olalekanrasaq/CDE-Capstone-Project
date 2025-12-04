@@ -1,16 +1,21 @@
-with raw_customers as (
-    select * 
-    from {{ source('coretelecom', 'customers') }}
-),
+{{ config(
+    materialized='incremental',
+    unique_key='customer_id'
+) }}
 
-ranked_customers as (
-    select
-        *,
-        row_number() over (
-            partition by customer_id
-            order by signup_date desc
-        ) as rn
-    from raw_customers
+
+with dedup_customers as (
+    select * 
+    from (
+        select
+            *,
+            row_number() over (
+                partition by customer_id
+                order by ingested_at desc
+            ) as rn
+        from {{ source('coretelecom', 'customers') }}
+    ) as t
+    where rn = 1
 )
 
 select
@@ -38,6 +43,6 @@ select
 	      ELSE LOWER(split_part(email,'@',2))
 	    END
 	) as customer_email,
-    address
-from ranked_customers
-where rn = 1
+    address,
+	ingested_at
+from dedup_customers

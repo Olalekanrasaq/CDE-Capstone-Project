@@ -33,10 +33,9 @@ models:
   dbt_project:
     # Config indicated by + and applies to all files under models/example/
     staging:
-      +materialized: view
+      +materialized: incremental
       +schema: staging
       +threads: 1
     prod:
-      +materialized: table
+      +materialized: incremental
       +schema: production
-      +threads: 1
