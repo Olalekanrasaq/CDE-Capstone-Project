@@ -18,7 +18,7 @@ This project involves the design and implementation of a data platform for Coret
 
 ## Architecture Diagram
 
-![Architecture Diagram](./infrastructure/images/coretelecom_architecture_diagram.png)
+![Architecture Diagram](./coretelecom_architecture.png)
 
 ## Getting Started
 
