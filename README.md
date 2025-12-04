@@ -63,7 +63,7 @@ To set up and run the Coretelecom Unified Customer Experience Data Platform, fol
 
 ## Further Work
 
-- ** Advanced Analytics**: Implement advanced analytics and machine learning models on top of the data platform to derive deeper insights into customer experience.
+- **Advanced Analytics**: Implement advanced analytics and machine learning models on top of the data platform to derive deeper insights into customer experience.
 - **Enhanced Data Visualization**: Integrate with BI tools for enhanced data visualization and reporting capabilities.
 - **Cost Optimization**: Continuously monitor and optimize the cost of AWS resources used in the platform.
 - **Security Enhancements**: Implement additional security measures, such as data encryption and access controls, to protect sensitive customer data.
