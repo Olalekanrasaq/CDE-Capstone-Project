@@ -32,11 +32,14 @@ To set up and run the Coretelecom Unified Customer Experience Data Platform, fol
 
 1. **Clone the Repository**: Clone this repository to your local machine.
 2. **Set Up AWS Resources**: Use the Terraform scripts in the `infrastructure/` directory to provision the necessary AWS resources. The AWS credentials should be configured in your environment. You can leverage `aws configure` to set up your credentials.
-3. Pull the project image from docker hub using the following command:
+3. **Pull the project image from Docker Hub**: Pull the project image from Docker Hub using the following command:
    ```
    docker pull olalekanrasaq/my-cde-capstone-pipeline:latest
    ```
-   Then do 'docker-compose up -d' to start airflow instance.
+   Then run the docker-compose to start the services:
+   ```
+   docker-compose up -d
+   ```
 4. **Configure Airflow Connections**: Set up Airflow and configure the connections to AWS services. The required connections include:
    - `aws_source`: AWS credentials for accessing source S3 bucket and parameter store.
    - `aws_dest`: AWS credentials for accessing destination S3 bucket.
