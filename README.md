@@ -12,6 +12,9 @@ This project involves the design and implementation of a data platform for Coret
   - `include/sql/`: SQL scripts for creating Redshift schemas.
   - `dbt_project/models/`: DBT models for transforming and aggregating data.
 - `infrastructure/`: Infrastructure as Code (IaC) scripts for setting up AWS resources using Terraform.
+- `app/`: Application code for querying and analyzing data.
+  - `app/query.py`: Python scripts for querying the Redshift data warehouse.
+  - `app/main.py`: Main streamlit application web interface codes.
 - `Dockerfile`: Docker configuration for the custom image.
 - `requirements.txt`: Python dependencies for the project.
 - `Docker-compose.yml`: Docker Compose configuration for local development and testing.
@@ -36,6 +39,20 @@ To set up and run the Coretelecom Unified Customer Experience Data Platform, fol
    - `initialize_autocopy`: This DAG initializes Redshift AutoCopy for efficient data loading and triggers the `coretelecom` DAG.
    - `coretelecom`: This DAG orchestrates the data ingestion, transformation, and loading processes.
 6. **Monitor and Maintain**: Use Airflow's UI to monitor the DAG runs and ensure that the data pipeline is functioning correctly.
+7. **Access Streamlit Application**: Run the Streamlit application to visualize and analyze the data stored in Redshift. To do this:
+   - Navigate to the `app/` directory.
+   - Create a .streamlit folder and add a `secrets.toml` file with the Redshift connection details.
+    - Example `secrets.toml` content:
+      ```
+      [connections.redshift_db]
+      host = "your-redshift-cluster-endpoint"
+      port = "5439"
+      database = "your-database-name"
+      user = "your-username"
+      password = "your-password"
+      ```
+   - Install Streamlit if not already installed: `pip install streamlit`.
+   - Run the command: `streamlit run main.py`.
 
 ## Choice of Tools and Technologies
 
@@ -46,6 +63,7 @@ To set up and run the Coretelecom Unified Customer Experience Data Platform, fol
 - **DBT (Data Build Tool)**: Utilized for transforming and modeling data within the Redshift data warehouse.
 - **Terraform**: Employed for Infrastructure as Code (IaC) to provision and manage AWS resources.
 - **Docker**: Used for containerizing the application and ensuring consistent environments across development and production.
+- **Python**: The primary programming language for writing data ingestion scripts, Airflow DAGs, and the Streamlit application.
 
 ## Key Features
 
@@ -60,6 +78,7 @@ To set up and run the Coretelecom Unified Customer Experience Data Platform, fol
 - **Data Quality Checks**: Implementation of data quality checks to validate the integrity and accuracy of ingested and transformed data.
 - **Custom Docker Image**: Creation of a custom Docker image to encapsulate all codes, dependencies, and configurations required for the data platform.
 - **Infrastructure as Code**: Use of Terraform to manage and provision AWS resources, ensuring reproducibility and version control of infrastructure.
+- **Streamlit Application**: Development of a Streamlit application for data visualization and analysis, providing an interactive interface for stakeholders to explore the data.
 
 ## Further Work
 

@@ -12,3 +12,4 @@ gc_credentials.json
 *.hcl
 *.tfstate
 *.tfstate.backup
+.streamlit/
