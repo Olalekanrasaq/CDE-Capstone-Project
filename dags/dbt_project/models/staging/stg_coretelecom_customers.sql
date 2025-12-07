@@ -25,8 +25,8 @@ select
     cast(birth_date as date) as birth_date,
     cast(signup_date as date) as signup_date,
     (
-	    REGEXP_REPLACE(
-		    REGEXP_REPLACE(
+	    regexp_replace(
+		    regexp_replace(
 		        split_part(email, '@', 1),
 		        '^[A-Za-z0-9]*[0-9]+',
 		        ''
@@ -35,13 +35,13 @@ select
 		    ''
 	 	)
 	    || '@' ||
-	    CASE
-	      WHEN LOWER(split_part(email,'@',2)) LIKE '%gmai%' THEN 'gmail.com'
-	      WHEN LOWER(split_part(email,'@',2)) LIKE '%hotma%' THEN 'hotmail.com'
-	      WHEN LOWER(split_part(email,'@',2)) LIKE '%yaho%'  THEN 'yahoo.com'
-	      WHEN LOWER(split_part(email,'@',2)) LIKE '%ymail%' THEN 'ymail.com'
-	      ELSE LOWER(split_part(email,'@',2))
-	    END
+	    case
+	      when lower(split_part(email, '@', 2)) like '%gmai%' then 'gmail.com'
+	      when lower(split_part(email, '@', 2)) like '%hotma%' then 'hotmail.com'
+	      when lower(split_part(email, '@', 2)) like '%yaho%' then 'yahoo.com'
+	      when lower(split_part(email, '@', 2)) like '%ymail%' then 'ymail.com'
+	      else lower(split_part(email, '@', 2))
+	    end
 	) as customer_email,
     address,
 	ingested_at
