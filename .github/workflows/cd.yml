@@ -29,5 +29,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/my-cde-capstone-app:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/my-cde-capstone-app:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/my-cde-capstone-pipeline:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/my-cde-capstone-pipeline:${{ github.sha }}
