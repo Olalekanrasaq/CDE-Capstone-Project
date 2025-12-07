@@ -9,4 +9,4 @@ rules = L001,L002,L003,L004,L005,L006,L007,L008,L009,L010,L011,L012,L013,L014
 exclude_rules = L031,L034
 
 [sqlfluff:templater:dbt]
-project_dir = .
+project_dir = ./dags/dbt_project/
