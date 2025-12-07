@@ -1,5 +1,5 @@
 import streamlit as st
-from query import *
+from app.query import *
 
 # Page config
 st.set_page_config(page_title="Coretelecom", layout="wide",
