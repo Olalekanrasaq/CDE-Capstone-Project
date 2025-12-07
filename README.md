@@ -61,11 +61,13 @@ To set up and run the Coretelecom Unified Customer Experience Data Platform, fol
 
 All the codes have also been packaged into a custom Docker image available on Docker Hub. Pull the image using the following command:
 
-```docker pull olalekanrasaq/my-cde-capstone-pipeline:latest
+```
+docker pull olalekanrasaq/my-cde-capstone-pipeline:latest
 ```
 And then run the pipeline with:
 
-```docker run -d olalekanrasaq/my-cde-capstone-pipeline:latest
+```
+docker run -d olalekanrasaq/my-cde-capstone-pipeline:latest
 ```
 
 ## Choice of Tools and Technologies
