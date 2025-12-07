@@ -18,6 +18,9 @@ This project involves the design and implementation of a data platform for Coret
 - `Dockerfile`: Docker configuration for the custom image.
 - `requirements.txt`: Python dependencies for the project.
 - `Docker-compose.yml`: Docker Compose configuration for local development and testing.
+- `.github/workflows/`: GitHub Actions workflows for CI/CD.
+   - `.github/workflows/ci.yml`: CI workflow that carries out checks on code linting to ensure code written follows best practices.
+   - `.github/workflows/cd.yml`: CD workflow for deploying the project to Docker Hub.
 
 ## Architecture Diagram
 
@@ -53,6 +56,17 @@ To set up and run the Coretelecom Unified Customer Experience Data Platform, fol
       ```
    - Install Streamlit if not already installed: `pip install streamlit`.
    - Run the command: `streamlit run main.py`.
+8. **CI/CD**: The project includes GitHub Actions workflows for continuous integration and deployment. Ensure that your code passes the CI checks before merging changes.
+
+
+All the codes have also been packaged into a custom Docker image available on Docker Hub. Pull the image using the following command:
+
+```docker pull olalekanrasaq/my-cde-capstone-pipeline:latest
+```
+And then run the pipeline with:
+
+```docker run -d olalekanrasaq/my-cde-capstone-pipeline:latest
+```
 
 ## Choice of Tools and Technologies
 
@@ -64,6 +78,8 @@ To set up and run the Coretelecom Unified Customer Experience Data Platform, fol
 - **Terraform**: Employed for Infrastructure as Code (IaC) to provision and manage AWS resources.
 - **Docker**: Used for containerizing the application and ensuring consistent environments across development and production.
 - **Python**: The primary programming language for writing data ingestion scripts, Airflow DAGs, and the Streamlit application.
+- **Streamlit**: Selected for building an interactive web application for data visualization and analysis.
+- **Github Actions**: Used for implementing CI/CD pipelines to automate testing and deployment processes.
 
 ## Key Features
 
@@ -79,6 +95,7 @@ To set up and run the Coretelecom Unified Customer Experience Data Platform, fol
 - **Custom Docker Image**: Creation of a custom Docker image to encapsulate all codes, dependencies, and configurations required for the data platform.
 - **Infrastructure as Code**: Use of Terraform to manage and provision AWS resources, ensuring reproducibility and version control of infrastructure.
 - **Streamlit Application**: Development of a Streamlit application for data visualization and analysis, providing an interactive interface for stakeholders to explore the data.
+- **CI/CD Pipelines**: Implementation of CI/CD pipelines using GitHub Actions to automate testing and deployment processes.
 
 ## Further Work
 
